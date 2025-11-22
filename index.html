@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker Pro</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ================= LOGIN SCREEN ================= -->
+    <div id="loginScreen" class="loginOverlay">
+        <div class="loginBox">
+            <h3>Login</h3>
+
+            <form onsubmit="loginUser(); return false;">
+                <input type="text" id="loginUserId" placeholder="User ID">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button type="submit">Login</button>
+            </form>
+
+            <p style="margin-top:10px">Not registered?
+                <a href="#" onclick="showRegister()">Register</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ================= REGISTER SCREEN ================= -->
+    <div id="registerScreen" class="loginOverlay">
+        <div class="loginBox">
+            <h3>Create Account</h3>
+
+            <form onsubmit="registerUser(); return false;">
+                <input type="text" id="regName" placeholder="Enter Name">
+                <input type="password" id="regPassword" placeholder="Password">
+                <input type="number" id="regSalary" placeholder="Monthly Salary">
+                <input type="number" id="regSavingGoal" placeholder="Saving Goal (Optional)">
+                <button type="submit">Register</button>
+            </form>
+
+            <p style="margin-top:10px">Already have an account?
+                <a href="#" onclick="showLogin()">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ================= LOADER ================= -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- ================= TOAST ================= -->
+    <div id="toast"></div>
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+        <h2 class="logo">💰 ExpensePro</h2>
+
+        <nav>
+            <a class="active" onclick="showSection('dashboard')">
+                <span class="material-icons">dashboard</span> Dashboard
+            </a>
+
+            <a onclick="showSection('expenses')">
+                <span class="material-icons">receipt_long</span> Expenses
+            </a>
+
+            <a onclick="showSection('profile')">
+                <span class="material-icons">account_circle</span> Profile
+            </a>
+
+            <a onclick="logout()">
+                <span class="material-icons">logout</span> Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- ================= MAIN AREA ================= -->
+    <main class="main">
+
+        <header class="topbar">
+            <h2 id="topTitle">Dashboard</h2>
+
+            <div class="userTag">
+                <span class="material-icons">account_circle</span>
+                <p id="displayUserId">User</p>
+            </div>
+        </header>
+
+        <!-- ================= DASHBOARD ================= -->
+        <section id="dashboard" class="section active">
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>Monthly Salary</h3>
+                    <p id="salaryAmount">₹0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Savings Goal</h3>
+                    <p id="savingsGoal">₹0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Remaining Balance</h3>
+                    <p id="remainingBalance">₹0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Daily Limit</h3>
+                    <p id="dailyLimit">₹0</p>
+                </div>
+
+            </div>
+
+            <div class="chartBox">
+                <h3>Category-wise Expense</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <div class="chartBox">
+                <h3>Monthly Expense Trend</h3>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+
+        </section>
+
+        <!-- ================= EXPENSE PAGE ================= -->
+        <section id="expenses" class="section">
+
+            <div class="pageHeader">
+                <h3>My Expenses</h3>
+                <button class="addBtn" onclick="openAddModal()">
+                    <span class="material-icons">add</span> Add Expense
+                </button>
+            </div>
+
+            <div class="filters">
+                <input type="text" id="search" placeholder="Search..." oninput="applyFilters()" />
+                <select id="categoryFilter" onchange="applyFilters()">
+                    <option value="">All</option>
+                    <option>Food</option>
+                    <option>Travel</option>
+                    <option>Shopping</option>
+                    <option>Bills</option>
+                    <option>Other</option>
+                </select>
+
+                <input type="month" id="monthFilter" onchange="applyFilters()" />
+            </div>
+
+            <table class="expenseTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="expenseBody"></tbody>
+            </table>
+
+        </section>
+
+        <!-- ================= PROFILE PAGE ================= -->
+        <section id="profile" class="section">
+            <h3>User Profile</h3>
+
+            <div class="profileBox">
+                <span class="material-icons bigIcon">account_circle</span>
+                <p>Name: <b id="profileUserName"></b></p>
+                <p>User ID: <b id="profileUserId"></b></p>
+
+                <button onclick="changeSalary()">Update Salary</button>
+                <button onclick="updateSavingGoal()">Update Saving Goal</button>
+
+                <h4 style="margin-top:20px">Expense Analytics</h4>
+                <canvas id="profileBarChart" height="200"></canvas>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= ADD MODAL ================= -->
+    <div class="modalBg" id="addModal">
+        <div class="modal">
+            <h3>Add Expense</h3>
+
+            <input type="text" id="addTitle" placeholder="Title" />
+            <input type="number" id="addAmount" placeholder="Amount" />
+            <select id="addCategory">
+                <option>Food</option>
+                <option>Travel</option>
+                <option>Shopping</option>
+                <option>Bills</option>
+                <option>Other</option>
+            </select>
+            <input type="date" id="addDate" />
+
+            <button onclick="saveExpense()">Save</button>
+            <button class="closeBtn" onclick="closeAddModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ================= EDIT MODAL ================= -->
+    <div class="modalBg" id="editModal">
+        <div class="modal">
+            <h3>Edit Expense</h3>
+
+            <input type="hidden" id="editId" />
+            <input type="text" id="editTitle" />
+            <input type="number" id="editAmount" />
+            <select id="editCategory">
+                <option>Food</option>
+                <option>Travel</option>
+                <option>Shopping</option>
+                <option>Bills</option>
+                <option>Other</option>
+            </select>
+            <input type="date" id="editDate" />
+
+            <button onclick="updateExpense()">Update</button>
+            <button class="closeBtn" onclick="closeEditModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
