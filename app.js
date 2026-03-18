@@ -3,7 +3,7 @@
 ========================================================== */
 
 /* -------------------------------
-   GOOGLE SCRIPT URL
+   GOOGLE SCRIPT URL Modify This Script After Every Deployment
 -------------------------------- */
 const API_URL = "https://script.google.com/macros/s/AKfycbwNjlG_qNSNufmWgXHML6wvSTaIJTcGVZ3qXj0wxukwPuHjwbfjHUuoswaXhflfOlDpZA/exec"; // <<< IMPORTANT
 
