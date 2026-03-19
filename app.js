@@ -8,12 +8,13 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwNjlG_qNSNufmWgXHML6wv
 /* ==========================================================
    LOGIN + REGISTER SYSTEM
 ========================================================== */
-
+// this function is use for show all registered userd
 function showRegister() {
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("registerScreen").style.display = "flex";
 }
 
+// this function is use for show login screen
 function showLogin() {
     document.getElementById("registerScreen").style.display = "none";
     document.getElementById("loginScreen").style.display = "flex";
