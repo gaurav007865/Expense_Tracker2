@@ -5,9 +5,7 @@
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwNjlG_qNSNufmWgXHML6wvSTaIJTcGVZ3qXj0wxukwPuHjwbfjHUuoswaXhflfOlDpZA/exec"; // <<< IMPORTANT
 
-/* ==========================================================
-   LOGIN + REGISTER SYSTEM
-========================================================== */
+//    LOGIN + REGISTER SYSTEM
 // this function is use for show all registered userd
 function showRegister() {
     document.getElementById("loginScreen").style.display = "none";
@@ -21,6 +19,7 @@ function showLogin() {
 }
 
 /* ---------------- REGISTER USER (AUTO USER ID) ---------------- */
+// this  function is use for register new user with auto generated user id
 async function registerUser() {
 
     const name = document.getElementById("regName").value.trim();
